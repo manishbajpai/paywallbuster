@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+
+	"name": "Paywall Buster",
+	"description": "Warns if a link points to a paywall",
+	"version": "1.0",
+	"author": "@Manish",
+
+	"background": {
+		"scripts": ["background.js"],
+		"persistent": true
+	},
+
+	"permissions": [
+        "tabs",
+        "http://*/",
+        "https://*/"
+    ],
+	"browser_action": {
+		"default_icon": "logo.png",
+		"default_popup": "index.html"
+	}
+}
