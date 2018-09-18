@@ -1,7 +1,7 @@
 // send the page title as a chrome message
-console.log("Annotated all the known websites");
 
-var searchtext = "The Mercury News"
+var searchtext = ["The Mercury News",
+                  "The New York Times"]
 
 function replace(a,b)
 {
@@ -31,5 +31,25 @@ function replace(a,b)
     }
   }
 }
+if (document.addEventListener) {
+  //DOMContentLoaded doesn't wait for styles, subframes etc.
+  //document.addEventListener("DOMContentLoaded", initializeExecutor(), false);
 
-replace(searchtext, searchtext + " [$$$] ")
+  document.addEventListener("load", initializeExecutor());
+
+}
+
+function initializeExecutor() {
+  console.log("Annoting all the known websites");
+  setTimeout(function()
+    {
+      var x;
+      for (x in searchtext)
+      {
+        replace(searchtext[x], " [$$$] " + searchtext[x]);
+      }
+    }
+    , 3000);
+  console.log("Done Annoting all the known websites");
+
+}
