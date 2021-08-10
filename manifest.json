@@ -1,18 +1,18 @@
 {
 	"manifest_version": 2,
 
-	"name": "Paywall Buster",
+	"name": "AdAware",
 	"description": "Warns if a link points to a paywall",
-	"version": "1.0",
+	"version": "0.1",
 	"author": "@Manish",
 
 	"background": {
-		"scripts": ["background.js"],
+		"scripts": ["background.js", "execute.js"],
 		"persistent": true
 	},
 
 	"permissions": [
-        "tabs",
+        "tabs", "contextMenus", "storage",
         "http://*/",
         "https://*/"
     ],
