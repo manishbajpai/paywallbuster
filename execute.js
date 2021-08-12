@@ -47,19 +47,21 @@ function modifyLinks(rootNode) {
     var nodes = [rootNode];
     while (nodes.length > 0) {
         var node = nodes.shift();
-        console.log("details are: " + node.innerHTML)
-
-        if (node.tagName == "A") {
-            /* Modify the '<a>' element */
-            node.innerHTML = "~~" + node.innerHTML + "~~";
+        if (node.tagName == "CITE") {
+            node.innerHTML = "{Ad}" + node.innerHTML;
+            console.log(node.innerHTML)
         } else {
             /* If the current node has children, queue them for further
              * processing, ignoring any '<script>' tags. */
-            [].slice.call(node.children).forEach(function(childNode) {
-                if (childNode.tagName != "SCRIPT") {
-                    nodes.push(childNode);
-                }
-            });
+             console.log("children = " + node.children);
+             if (node.childElementCount >0 ) {
+                 [].slice.call(node.children).forEach(function(childNode) {
+                    if (childNode.tagName != "SCRIPT") {
+                        nodes.push(childNode);
+                        console.log("children details are: type=" + node.nodeType + "&id=" + node.id + "&tagname="+node.tagName)
+                    }
+                });
+             }
         }
     }
 }
@@ -109,40 +111,33 @@ var observer2 = new MutationObserver(function(mutations) {
     });
 });
 
-
-function filterResultInserts(event) {
-    var str = event.relatedNode;
-    //if (str.includes("search")) {
-        //console.log(event.target.nodeName);
-        //modifyLinks(event.target);
-    //}
-}
-function run() {
-  //console.log("Annoting all the known websites");
-
-  setTimeout(function()
-    {
-      var x;
-      for (x in searchtext)
-      {
-        //replace(searchtext[x], " [$$$] " + searchtext[x]);
-      }
+function modify(node) {
+    if (node.tagName == "CITE") {
+        node.innerHTML = "[Ad] " + node.innerHTML;
     }
-    , 3000);
-  //console.log("Done Annoting all the known websites");
-  /* Start observing 'body' for 'div#search' */
-  //observer1.observe(document.body, config);
-
-
-document.addEventListener('DOMNodeInserted', filterResultInserts);
-
 }
+var mut_count = 0
+function filterResultInserts(event) {
+    document.removeEventListener('DOMNodeInserted', filterResultInserts);
 
+    var str = event.relatedNode;
+    console.log(event);
+    console.log("count = " + mut_count++)
+    var nodes = document.querySelectorAll("CITE");
+    nodes.forEach(function(node) {
+        //console.log("Classname = "+ node.className)
+        if (!node.innerHTML.includes("[")) {
+            modify(node);
+        }
+    });
+    document.addEventListener('DOMNodeInserted', filterResultInserts);
+}
 
 if (document.addEventListener) {
-  //DOMContentLoaded doesn't wait for styles, subframes etc.
-  //document.addEventListener("DOMContentLoaded", run(), false);
-
-  document.addEventListener("load", run());
+    console.log("Annoting all the known websites");
+    //observer1.observe(document.body, config);
+    //DOMContentLoaded doesn't wait for styles, subframes etc.
+    //document.addEventListener("load", run());
+    document.addEventListener('DOMNodeInserted', filterResultInserts);
 
 }
