@@ -2,9 +2,9 @@
 	"manifest_version": 2,
 
 	"name": "AdAware",
-	"description": "Warns if a website listed in google search is ad-based",
+	"description": "Informs if a website listed in google search is ad-based",
 	"version": "0.1",
-	"author": "@Manish",
+	"author": "@mbajpai",
 
 	"background": {
 		"scripts": ["background.js"],
@@ -22,7 +22,10 @@
         "https://*/"
     ],
 	"browser_action": {
-		"default_icon": "logo.png",
+		"default_icon": "logo-200.png",
 		"default_popup": "index.html"
-	}
+	},
+    "icons": {
+        "200": "logo-200.png"
+            }
 }
