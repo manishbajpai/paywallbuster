@@ -2,7 +2,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.method == "getval")
       sendResponse({status: localStorage[request.key]});
     else
-      sendResponse({}); // snub them.
+      sendResponse({});
 });
 function addwebsite() {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
@@ -39,3 +39,31 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener(function (message) {
 	console.log("A message was received from a tab");
 });
+
+
+//1: Ad-based
+//2: Paywalled
+var adlist = [
+    "www.facebook.com",
+    "abcnews.go.com",
+    "www.foxnews.com",
+    'www.nbcnews.com',
+    'news.yahoo.com',
+    'www.nbcbayarea.com',
+    'sanfrancisco.cbslocal.com'
+]
+var paylist = [
+    'www.mercurynews.com'
+]
+function init() {
+    var fb = localStorage.getItem("www.facebook.com")
+    if (fb === null) {
+        for (i = 0; i < adlist.length; i++) {
+            localStorage.setItem(adlist[i], '1')
+        }
+        for (i = 0; i < paylist.length; i++) {
+            localStorage.setItem(paylist[i], '2')
+        }
+    }
+}
+init()
