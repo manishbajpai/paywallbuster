@@ -1,5 +1,5 @@
 // send the page title as a chrome message
-name = "Ad Aware"
+
 // var searchtext = ["The Mercury News",
 //                   "The New York Times"]
 //
@@ -115,7 +115,7 @@ function modify(node) {
     }
 }
 
-function isadwebsite(link, callback) {
+function isadwebsite(link, node) {
     var hostname = ""
     try {
         words = link.split('<')
@@ -123,22 +123,12 @@ function isadwebsite(link, callback) {
         hostname = url.hostname
     } catch (error) {
         console.log("url parsing failed " + error)
-        callback(false)
-        return 0;
+        return false;
     }
-    var obj = {}
-    obj[hostname] = "1"
-    chrome.storage.local.get(obj, function(result) {
-        if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError)
-            callback(false)
-        } else {
-            if (obj) {
-                console.log(obj)
-                callback(true)
-            } else {
-                callback(false)
-            }
+    chrome.runtime.sendMessage({method: "getval", key: hostname}, function(response) {
+        console.log(response.status);
+        if (response.status == "1") {
+            modify(node)
         }
     });
 }
@@ -149,11 +139,9 @@ function processNode(event) {
     var nodes = document.querySelectorAll("CITE");
     nodes.forEach(function(node) {
         if (!node.innerHTML.includes("[")) {
-            isadwebsite(node.innerHTML, function(result) {
-                if (result) {
-                    modify(node)
-                }
-            });
+            if (isadwebsite(node.innerHTML, node)) {
+                //modify(node)
+            }
         }
     });
     //document.addEventListener('DOMNodeInserted', processNode);
@@ -162,12 +150,15 @@ function processNode(event) {
 function run() {
     console.log("Starting");
     hostname = window.location.hostname
-    console.log("Parsing the hostname" + hostname);
+    console.log("Parsing the hostname " + hostname);
 
     if (hostname.includes("google.com")) {
         console.log("Annoting all the known websites");
         //observer1.observe(document.body, config);
+        localStorage.setItem('en.wikipedia.org', '1')
         document.addEventListener('DOMNodeInserted', processNode);
+    } else {
+        console.log("ignoring the page")
     }
 }
 document.addEventListener("load", run());

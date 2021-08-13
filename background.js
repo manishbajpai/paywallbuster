@@ -1,36 +1,15 @@
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    //code in here will run every time a user goes onto a new tab
-        //
-		// if (changeInfo.status === "complete" )     {
-		// 	console.log("Tab loading: " + changeInfo.status)
-        //
-		// 	chrome.tabs.executeScript(null, {
-		// 		file: 'execute.js'
-		// 	}, _=>{
-		// 	  let e = chrome.runtime.lastError;
-		// 	  if(e !== undefined){
-		// 	    console.log( _, e);
-		// 	  }
-		// 	});
-		// }
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.method == "getval")
+      sendResponse({status: localStorage[request.key]});
+    else
+      sendResponse({}); // snub them.
 });
-
 function addwebsite() {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         url = new URL(tabs[0].url);
         hostname = url.hostname
         console.log(hostname)
-        var obj = {}
-        obj[hostname] = "1"
-        chrome.storage.local.set(obj, function() {
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError)
-                return 0
-            }
-            chrome.storage.local.get(obj, function(result){
-                console.log( result);
-            })
-        });
+        localStorage.setItem(hostname, "1")
     });
 }
 
@@ -39,12 +18,10 @@ function removewebsite() {
         url = new URL(tabs[0].url);
         hostname = url.hostname
         console.log(hostname)
-        chrome.storage.local.remove(hostname, function() {
-            console.log("Removed website");
-        });
+        localStorage.removeItem(hostname);
     });
 }
-
+name = "Ad Aware"
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         title: "Add website to " + name,
