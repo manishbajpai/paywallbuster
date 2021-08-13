@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
 
-	"name": "AdAware",
-	"description": "Informs if a website listed in google search is ad-based",
+	"name": "Paywall Aware",
+	"description": "Informs if a website listed in web search is paywalled or ad-based",
 	"version": "0.1",
 	"author": "@mbajpai",
 

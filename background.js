@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     else
       sendResponse({});
 });
-function addwebsite() {
+function addwebsitead() {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         url = new URL(tabs[0].url);
         hostname = url.hostname
@@ -12,7 +12,14 @@ function addwebsite() {
         localStorage.setItem(hostname, "1")
     });
 }
-
+function addwebsitepay() {
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        url = new URL(tabs[0].url);
+        hostname = url.hostname
+        console.log(hostname)
+        localStorage.setItem(hostname, "2")
+    });
+}
 function removewebsite() {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         url = new URL(tabs[0].url);
@@ -24,12 +31,17 @@ function removewebsite() {
 name = "Ad Aware"
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
-        title: "Add website to " + name,
+        title: "Add website as ad-based",
         contexts: ['all'],
-        onclick: addwebsite
+        onclick: addwebsitead
     });
     chrome.contextMenus.create({
-        title: "Remove website from " + name,
+        title: "Add website as paywalled",
+        contexts: ['all'],
+        onclick: addwebsitepay
+    });
+    chrome.contextMenus.create({
+        title: "Remove website",
         contexts: ['all'],
         onclick: removewebsite
     });
