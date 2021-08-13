@@ -2,18 +2,24 @@
 	"manifest_version": 2,
 
 	"name": "AdAware",
-	"description": "Warns if a link points to a paywall",
+	"description": "Warns if a website listed in google search is ad-based",
 	"version": "0.1",
 	"author": "@Manish",
 
 	"background": {
-		"scripts": ["background.js", "execute.js"],
+		"scripts": ["background.js"],
 		"persistent": true
 	},
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["execute.js"]
+        }
+    ],
 
 	"permissions": [
         "tabs", "contextMenus", "storage",
-        "https://*.google.com/"
+        "https://*/"
     ],
 	"browser_action": {
 		"default_icon": "logo.png",

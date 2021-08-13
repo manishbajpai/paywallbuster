@@ -1,31 +1,37 @@
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     //code in here will run every time a user goes onto a new tab
-
-		if (changeInfo.status === "complete" )     {
-			console.log("Tab loading: " + changeInfo.status)
-
-			chrome.tabs.executeScript(null, {
-				file: 'execute.js'
-			}, _=>{
-			  let e = chrome.runtime.lastError;
-			  if(e !== undefined){
-			    console.log( _, e);
-			  }
-			});
-		}
+        //
+		// if (changeInfo.status === "complete" )     {
+		// 	console.log("Tab loading: " + changeInfo.status)
+        //
+		// 	chrome.tabs.executeScript(null, {
+		// 		file: 'execute.js'
+		// 	}, _=>{
+		// 	  let e = chrome.runtime.lastError;
+		// 	  if(e !== undefined){
+		// 	    console.log( _, e);
+		// 	  }
+		// 	});
+		// }
 });
-console.log("Injected...");
 
 function addwebsite() {
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
         url = new URL(tabs[0].url);
         hostname = url.hostname
         console.log(hostname)
-        chrome.storage.sync.set({hostname: "1"}, function() {
-            console.log("Added website");
+        var obj = {}
+        obj[hostname] = "1"
+        chrome.storage.local.set(obj, function() {
+            if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError)
+                return 0
+            }
+            chrome.storage.local.get(obj, function(result){
+                console.log( result);
+            })
         });
     });
-
 }
 
 function removewebsite() {
@@ -33,11 +39,10 @@ function removewebsite() {
         url = new URL(tabs[0].url);
         hostname = url.hostname
         console.log(hostname)
-        chrome.storage.sync.remove(hostname, function() {
+        chrome.storage.local.remove(hostname, function() {
             console.log("Removed website");
         });
     });
-
 }
 
 chrome.runtime.onInstalled.addListener(() => {
