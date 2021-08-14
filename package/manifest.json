@@ -3,7 +3,7 @@
 
 	"name": "Paywall Aware",
 	"description": "Informs if a website listed in web search is paywalled or ad-based",
-	"version": "0.1",
+	"version": "0.12",
 	"author": "@mbajpai",
 
 	"background": {
@@ -18,8 +18,8 @@
     ],
 
 	"permissions": [
-        "tabs", "contextMenus", "storage",
-        "https://*/"
+        "activeTab", "contextMenus", "storage",
+        "https://*.google.com/"
     ],
 	"browser_action": {
 		"default_icon": "logo-200.png",
