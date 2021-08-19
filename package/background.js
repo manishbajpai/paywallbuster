@@ -52,46 +52,46 @@ chrome.runtime.onMessage.addListener(function (message) {
 	console.log("A message was received from a tab");
 });
 
-
-//1: Ad-based
-//2: Paywalled
 var adlist = [
-    "www.facebook.com",
-    "abcnews.go.com",
-    "www.foxnews.com",
-    'www.nbcnews.com',
+    'abcnews.go.com',
     'news.yahoo.com',
+    'sanfrancisco.cbslocal.com',
+    'www.facebook.com',
+    'www.foxnews.com',
     'www.nbcbayarea.com',
-    'sanfrancisco.cbslocal.com'
+    'www.nbcnews.com',
 ]
+
+// List of ad supported websites, like facebook. Used in *google news* search.
 var adlistNews = [
-    'CNBC',
-    'CNN',
-    'NBC News',
-    'POLITICO',
-    'The Guardian',
-    'New York Post',
     'CBS New York',
     'CBS News',
-    'WPGL Local 10',
-    'Yahoo News',
-    'SF Gate',
-    'Yahoo Lifestyle',
+    'CNN',
     'NBC News',
-    'The Seattle Times'
-
+    'NBC News',
+    'New York Post',
+    'POLITICO',
+    'SF Gate',
+    'The Guardian',
+    'The Seattle Times',
+    'WPGL Local 10',
+    'Yahoo Lifestyle',
+    'Yahoo News',
+    'CNBC',
 ]
+
+// List of paywalled websites like Mercury NewsUsed in *google* search.
 var paylist = [
     'www.mercurynews.com'
 ]
+
+// List of paywalled websites like Mercury NewsUsed in *google news* search.
 var paylistNews = [
-    "The Mercury News",
-    "The New York Times",
     'Business Insider',
-
-
-
+    'The Mercury News',
+    'The New York Times',
 ]
+
 function init() {
     var fb = localStorage.getItem("Business Insider")
     if (fb === null) {
