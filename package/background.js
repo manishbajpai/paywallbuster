@@ -64,17 +64,48 @@ var adlist = [
     'www.nbcbayarea.com',
     'sanfrancisco.cbslocal.com'
 ]
+var adlistNews = [
+    'CNBC',
+    'CNN',
+    'NBC News',
+    'POLITICO',
+    'The Guardian',
+    'New York Post',
+    'CBS New York',
+    'CBS News',
+    'WPGL Local 10',
+    'Yahoo News',
+    'SF Gate',
+    'Yahoo Lifestyle',
+    'NBC News',
+    'The Seattle Times'
+
+]
 var paylist = [
     'www.mercurynews.com'
 ]
+var paylistNews = [
+    "The Mercury News",
+    "The New York Times",
+    'Business Insider',
+
+
+
+]
 function init() {
-    var fb = localStorage.getItem("www.facebook.com")
+    var fb = localStorage.getItem("Business Insider")
     if (fb === null) {
         for (i = 0; i < adlist.length; i++) {
             localStorage.setItem(adlist[i], '1')
         }
         for (i = 0; i < paylist.length; i++) {
             localStorage.setItem(paylist[i], '2')
+        }
+        for (i = 0; i < adlistNews.length; i++) {
+            localStorage.setItem(adlistNews[i], '1')
+        }
+        for (i = 0; i < paylistNews.length; i++) {
+            localStorage.setItem(paylistNews[i], '2')
         }
     }
 }

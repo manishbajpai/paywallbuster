@@ -114,7 +114,7 @@ function log(str) {
 }
 
 function modify(node, type) {
-    if (node.tagName == "CITE") {
+    if (node.tagName == "CITE" | node.tagName == "A") {
         if (type == '1') {
             node.innerHTML = "[Ad] " + node.innerHTML;
         } else if (type = '2') {
@@ -123,7 +123,7 @@ function modify(node, type) {
     }
 }
 
-function isadwebsite(link, node) {
+function parseWww(link, node) {
     var hostname = ""
     try {
         words = link.split('<')
@@ -135,20 +135,34 @@ function isadwebsite(link, node) {
         return false;
     }
     chrome.runtime.sendMessage({method: "getval", key: hostname}, function(response) {
-        //log(response.status);
         if (response.status ) {
             modify(node, response.status )
         }
     });
 }
 
+function parseNews(link, node) {
+    chrome.runtime.sendMessage({method: "getval", key: link}, function(response) {
+        if (response.status ) {
+            if (!node.innerHTML.includes("[")) {
+                modify(node, response.status )
+            }
+        }
+    });
+}
+var type = "-"
+var nodeType = '-'
 function processNode(event) {
     document.removeEventListener('DOMNodeInserted', processNode);
-    var str = event.relatedNode;
-    var nodes = document.querySelectorAll("CITE");
+    var nodes = document.querySelectorAll(nodeType);
     nodes.forEach(function(node) {
         if (!node.innerHTML.includes("[")) {
-            isadwebsite(node.innerHTML, node)
+            if (type == "www") {//www.google.com
+                parseWww(node.innerHTML, node)
+            } else if (type == "news" & node.innerHTML != "" & (node.parentNode.tagName == "DIV") & (node.getAttribute ("data-n-tid") == "9")) { //a lot of empty ones there (> 1500)
+                parseNews(node.innerHTML, node)
+                //log("parent node type = " + node.getAttribute ("data-n-tid") )
+            }
         }
     });
     //document.addEventListener('DOMNodeInserted', processNode);
@@ -157,13 +171,16 @@ function processNode(event) {
 function run() {
     log("Starting");
     hostname = window.location.hostname
-    log("Parsing the hostname " + hostname);
-
-    if (hostname.includes("google.com")) {
+    if (hostname.includes("www.google.com"))
+        type = "www"
+        nodeType = "CITE"
+    if (hostname.includes("news.google.com"))
+        type = "news"
+        nodeType="A"
+     if (type != "-"){
         log("Annoting all the known websites");
         //observer1.observe(document.body, config);
-        localStorage.setItem('en.wikipedia.org', '1')
-        document.addEventListener('DOMNodeInserted', processNode);
+        document.addEventListener('DOMNodeInserted', processNode)
     } else {
         log("ignoring the page")
     }
