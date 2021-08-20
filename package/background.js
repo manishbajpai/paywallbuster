@@ -28,7 +28,7 @@ function removewebsite() {
         localStorage.removeItem(hostname);
     });
 }
-name = "Ad Aware"
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         title: "Add website as ad-based",
@@ -87,9 +87,28 @@ var paylist = [
 
 // List of paywalled websites like Mercury NewsUsed in *google news* search.
 var paylistNews = [
+    'Bloomberg News',
+    'Boston Herald',    
     'Business Insider',
+    'Financial Times',
+    'Herald Sun',
+    'Houston Chronicle',
+    'Los Angeles Times',
+    'MIT Technology Review',
+    'National Business Review',
+    'National Post',
+    'Scientific American',
+    'The Athletic',
+    'The Boston Globe',
+    'The Christian Science Monitor',
+    'The Daily Telegraph',
+    'The Diplomat',
+    'The Economist',
+    'The Florida Times-Union',
     'The Mercury News',
     'The New York Times',
+    'The Wall Street Journal',
+    'The Washington Post',
 ]
 
 function init() {
